@@ -1,13 +1,60 @@
 import pandas as pd
 import numpy as np
+from tensorflow import keras
+
+
 
 
 data_df = pd.read_csv("./data/dataset.csv")
 
-def total_unique_symptoms(df):
-    lista =list( df['Symptom_1'].unique())
+dis_list = ['Fungal infection',
+ 'Allergy',
+ 'GERD',
+ 'Chronic cholestasis',
+ 'Drug Reaction',
+ 'Peptic ulcer diseae',
+ 'AIDS',
+ 'Diabetes ',
+ 'Gastroenteritis',
+ 'Bronchial Asthma',
+ 'Hypertension ',
+ 'Migraine',
+ 'Cervical spondylosis',
+ 'Paralysis (brain hemorrhage)',
+ 'Jaundice',
+ 'Malaria',
+ 'Chicken pox',
+ 'Dengue',
+ 'Typhoid',
+ 'hepatitis A',
+ 'Hepatitis B',
+ 'Hepatitis C',
+ 'Hepatitis D',
+ 'Hepatitis E',
+ 'Alcoholic hepatitis',
+ 'Tuberculosis',
+ 'Common Cold',
+ 'Pneumonia',
+ 'Dimorphic hemmorhoids(piles)',
+ 'Heart attack',
+ 'Varicose veins',
+ 'Hypothyroidism',
+ 'Hyperthyroidism',
+ 'Hypoglycemia',
+ 'Osteoarthristis',
+ 'Arthritis',
+ '(vertigo) Paroymsal  Positional Vertigo',
+ 'Acne',
+ 'Urinary tract infection',
+ 'Psoriasis',
+ 'Impetigo']
+
+
+def total_unique_symptoms(data_df):
+    #Returns all the uniques symptoms from all 17 columns
+    lista =list( data_df['Symptom_1'].unique())
     for i in range(1,8):
-        list_ =  list(df[f'Symptom_{i}'].unique())
+        list_ =  list(data_df[f'Symptom_{i}'].unique())
         for j in list_:
             if j not in lista:
                 lista.append(j)
@@ -16,11 +63,25 @@ def total_unique_symptoms(df):
     return lista
      
      
-     
+    
+  
+def get_dis_vectors():   
+    #return the 43 vectors for the disease 
+    
+    dis_vectors = []
+    for i in range(len(data_df)):
+        vec = np.zeros(len(dis_list))
+        for j in range(len(dis_list)):
+            if data_df.iloc[i][0] == dis_list[j]:
+                vec[j] = 1
+        dis_vectors.append(vec)
+    return dis_vectors
+             
     
       
 
 def Data_Algorithm():
+    #Returns the All unique symptoms into a  103 vectors
     lista = total_unique_symptoms(data_df)
     
     Disease = []
@@ -44,22 +105,25 @@ def Data_Algorithm():
     df = pd.DataFrame(has)
     return df
 
+
+
 df = Data_Algorithm()    
         
 from sklearn.model_selection import train_test_split
 # Convert the 'Symptoms' column to a NumPy array
 symptoms_array = np.vstack(df['Vectors'].tolist())#<-----This one is important remember!!!!!!!!!!!!
 
+dis = get_dis_vectors() #<--- this function provides all the vectord for 43 disease.
 
-# Convert the 'Disease' column to one-hot encoded labels
-labels = pd.get_dummies(df['Disease']).values
+labels = np.vstack(dis) #<-- converts into numpy array format for training the format.
+
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(symptoms_array, labels, test_size=0.2, random_state=42)
 
 
 
-from tensorflow import keras
+
 
 # Define the ANN model
 model = keras.Sequential([
@@ -77,17 +141,18 @@ model.compile(
     )
 
 # Train the model
-model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2)
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
 
 
 def check(user_input):
-    lista = total_unique_symptoms(df)
+    lista = total_unique_symptoms(data_df)
     new_list = []
     for i in lista:
         if isinstance(i, str):  # Check if the element is a string
             new_list.append(i.strip())
         else:
             new_list.append(i)
+            
     user_input_symptoms = user_input
 
     
@@ -109,3 +174,7 @@ def check(user_input):
     # Display the predicted class and its probability
     print(f"Predicted Disease Class: {predicted_class}")
     print(f"Probability Distribution: {predictions[0][predicted_class]}") 
+    print(f"Your Disease is : {dis_list[predicted_class]}")
+    
+
+check(['vomiting','breathlessness','sweating','chest_pain'])
