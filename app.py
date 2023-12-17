@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-
+from works import Health
 app = Flask(__name__)
 
 symptoms_list = ['itching', 'skin_rash', 'continuous_sneezing', 'shivering', 'stomach_pain', 'acidity', 'vomiting',
@@ -23,6 +23,9 @@ symptoms_list = ['itching', 'skin_rash', 'continuous_sneezing', 'shivering', 'st
                  'puffy_face_and_eyes', 'fast_heart_rate', 'irritability', 'muscle_pain', 'mild_fever', 'yellow_urine',
                  'phlegm', 'enlarged_thyroid']
 
+obj = Health()
+
+
 @app.route('/')
 def index():
     return render_template('index.html', symptoms=symptoms_list)
@@ -30,7 +33,9 @@ def index():
 @app.route('/process_symptoms', methods=['POST'])
 def process_symptoms():
     selected_symptoms = request.form.getlist('symptoms')
-    return render_template('final.html', diseases={"Selected_symptoms": selected_symptoms})
+    diseases = obj.check(['loss_of_balance','dizziness'])
+    return render_template('final.html', diseases={"Selected_symptoms": selected_symptoms,
+                                                   'Dis':diseases})
 
 if __name__ == "__main__":
     app.run(debug=True)
