@@ -194,7 +194,7 @@ class Health():
 
 def main():
     obj = Health()
-    obj.check(['loss_of_balance','dizziness'])
+    obj.check(['skin_rash','chills','joint_pain','vomiting','fatigue','high_fever','headache','nausea','loss_of_appetite','pain_behind_the_eyes','back_pain','malaise','muscle_pain','red_spots_over_body'])
     
     
 if __name__=='__main__':

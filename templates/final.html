@@ -29,6 +29,17 @@
         </ul>
         <ul>
             {{diseases.Dis}}
+            
+        </ul>
+        <ul>
+            Diseases Description
+            {{diseases.Description}}
+        </ul>
+        <ul>
+            Precaution Measures
+            {% for prec in diseases.precaution %}
+                <li>{{ prec }}</li>
+            {% endfor %}
         </ul>
     </div>
 
