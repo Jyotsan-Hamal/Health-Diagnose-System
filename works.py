@@ -176,25 +176,29 @@ class Health():
         # Make predictions with the trained model
         predictions = model.predict(user_input_array)
 
-        # Get the predicted disease class (index with the highest probability)
-        predicted_class = np.argmax(predictions)
+                # Get the indices of the top 5 predicted classes
+        top_classes_indices = np.argsort(predictions)[0, -5:][::-1]
 
-        # Display the predicted class and its probability
-        print(f"Predicted Disease Class: {predicted_class}")
-        print(f"Probability Distribution: {predictions[0][predicted_class]}") 
-        print(f"Your Disease is : {self.dis_list[predicted_class]}")
-        return self.dis_list[predicted_class]
+        # Display the top 5 predicted classes and their probabilities
+        print("Top 5 Predicted Disease Classes:")
+        for index in top_classes_indices:
+            disease_class = self.dis_list[index]
+            probability = predictions[0][index]
+            print(f"{disease_class}: {probability}")
+
+        # Return the top predicted disease class
+        return self.dis_list[top_classes_indices[0]]
 
 
 
-
+#blurred_and_distorted_vision
 
 
 
 
 def main():
     obj = Health()
-    obj.check(['skin_rash','chills','joint_pain','vomiting','fatigue','high_fever','headache','nausea','loss_of_appetite','pain_behind_the_eyes','back_pain','malaise','muscle_pain','red_spots_over_body'])
+    obj.check(['history_of_alcohol_consumption','swollen_legs','family_history','obesity','bloody_stool','blurred_and_distorted_vision','anxiety','weight_gain','chest_pain','headache',''])
     
     
 if __name__=='__main__':
