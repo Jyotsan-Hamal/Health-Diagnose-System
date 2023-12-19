@@ -27,20 +27,29 @@
                 <li>{{ selected_symptom }}</li>
             {% endfor %}
         </ul>
-        <ul>
+        <h1>
             {{diseases.Dis}}
             
-        </ul>
-        <ul>
-            Diseases Description
+        </h1>
+        
+    </div>
+    <divclass="container">
+        <h1>
+            
+            Diseases Description : 
+            <br>
             {{diseases.Description}}
-        </ul>
-        <ul>
-            Precaution Measures
+        </h1>
+        
+        <br>
+        <br>
+        <br>
+            <h1>Precaution Measures :</h1>
+            <br>
             {% for prec in diseases.precaution %}
-                <li>{{ prec }}</li>
+               <ol> <h2>{{ prec }}</h2> </ol>
             {% endfor %}
-        </ul>
+        
     </div>
 
     <!-- Bootstrap JS (optional, but may be needed for some features) -->
