@@ -10,6 +10,7 @@ model = keras.models.load_model('diagnose_system.h5')
 
 class Health():
     def __init__(self) -> None:
+        self.total_symptoms = 106
         self.symptoms = ['itching',
                         'skin_rash',
                         'continuous_sneezing',
@@ -159,13 +160,14 @@ class Health():
             'Psoriasis',
             'Impetigo'
             ]
+        
     def check(self,user_input):
            
         user_input_symptoms = user_input
 
         
-        vec = np.zeros(len(self.symptoms))
-        for index in range(len(self.symptoms)):
+        vec = np.zeros(self.total_symptoms) #Creates VECTORS OF length same as symptoms_list = 106
+        for index in range(self.total_symptoms):
             for j in user_input_symptoms:
                 if j == self.symptoms[index]:
                     
@@ -173,10 +175,11 @@ class Health():
             
         # Convert the list to a NumPy array and reshape it for model input
         user_input_array = np.array(vec).reshape(1, -1)
+        
         # Make predictions with the trained model
         predictions = model.predict(user_input_array)
 
-                # Get the indices of the top 5 predicted classes
+        # Get the indices of the top 5 predicted classes
         top_classes_indices = np.argsort(predictions)[0, -5:][::-1]
 
         # Display the top 5 predicted classes and their probabilities
@@ -198,7 +201,7 @@ class Health():
 
 def main():
     obj = Health()
-    obj.check(['history_of_alcohol_consumption','swollen_legs','family_history','obesity','bloody_stool','blurred_and_distorted_vision','anxiety','weight_gain','chest_pain','headache',''])
+    obj.check(['history_of_alcohol_consumption','swollen_legs','family_history','obesity','bloody_stool','blurred_and_distorted_vision','anxiety','weight_gain','chest_pain','headache'])
     
     
 if __name__=='__main__':

@@ -51,22 +51,27 @@ dis_list = ['Fungal infection',
 
 
 def total_unique_symptoms(data_df):
-    #Returns all the uniques symptoms from all 17 columns
-    lista =list( data_df['Symptom_1'].unique())
-    for i in range(1,8):
-        list_ =  list(data_df[f'Symptom_{i}'].unique())
-        for j in list_:
-            if j not in lista:
-                lista.append(j)
-            else:
-                continue
-    return lista
+    # Returns all the uniques symptoms from all 17 columns
+    
+    disease_list =list( data_df['Symptom_1'].unique())
+    # Creates a unique list of disease from first column from our dataset
+    for i in range(2,8):
+        # Create a Unique list of disease from symptom 1 to 8 columns
+        temp_list =  list(data_df[f'Symptom_{i}'].unique())
+        # iterate each items inside that list
+        for j in temp_list:
+            # Check if that disease is already in our list 
+            if j not in disease_list:
+                # If not then append the diesease and move to next column.
+                disease_list.append(j)
+            
+    return disease_list
      
      
     
   
 def get_dis_vectors():   
-    #return the 43 vectors for the disease 
+    # return the 43 vectors for the disease 
     
     dis_vectors = []
     for i in range(len(data_df)):
